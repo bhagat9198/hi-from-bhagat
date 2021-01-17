@@ -1,0 +1,19 @@
+.img-fluid-webBanner {
+  width: 100%;
+  height: 400px;
+  object-fit: contain;
+  /* border: 1px solid black; */
+  /* box-shadow: 20px 0px 20px black; */
+}
+
+.container-heading {
+  margin-bottom: 3%;
+}
+
+.container-application {
+  width: 90%;
+  margin-left: auto;
+  margin-bottom: 6%;
+  border-bottom: 5px solid black;
+  padding-bottom: 3%;
+}

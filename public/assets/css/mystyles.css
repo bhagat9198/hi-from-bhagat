@@ -1,0 +1,21 @@
+.avatars-div img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  /* border: 3px solid red; */
+  border-radius: 50%;
+}
+
+.av-radio {
+  visibility: hidden;
+}
+
+.form-control[type="file"] {
+  border: none;
+  outline: none;
+}
+
+.contact-support {
+  margin-top: 0;
+  padding-top: 0;
+}
