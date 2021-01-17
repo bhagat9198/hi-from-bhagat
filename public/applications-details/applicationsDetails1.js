@@ -110,4 +110,10 @@ db.collection('applications').onSnapshot(appSnaps => {
     loop: true,
     items: 1
   });
+
+  let scrollToId = window.location.href.split('#')[1];
+  console.log(scrollToId);
+  $('html, body').animate({
+    scrollTop: $(`.${scrollToId}`).offset().top
+  }, 'slow');
 })

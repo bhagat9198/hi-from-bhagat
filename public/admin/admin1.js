@@ -118,8 +118,8 @@ const appDetailsFormSubmit = (e) => {
     })
     .then(() => {
       appDetailsFormHTML.reset();
-      document.querySelector("#main-img").files.length = 0;
-      document.querySelector("#sub-imgs").files.length = 0;
+      document.querySelector("#main-img").value = '';
+      document.querySelector("#sub-imgs").value = '';
       console.log("updated");
       // console.log(updatedData);
     })
