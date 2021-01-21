@@ -5,7 +5,16 @@ const firebaseStorage = firebase.storage();
 
 // summernote inilise
 $(document).ready(function () {
-  $("#textarea-describtion").summernote();
+  $("#textarea-describtion").summernote({
+
+    placeholder: "Write Project Summery",
+    tabsize: 4,
+    height: 100,
+    // toolbar: [
+    //   ['fontSize', [20, 24]],
+
+    // ]
+  });
 });
 
 const appDetailsFormHTML = document.querySelector("#app-details-form");
@@ -29,7 +38,7 @@ const appDetailsFormSubmit = (e) => {
   const backend = appDetailsFormHTML["backend"].value;
   const appId = appDetailsFormHTML["appId"].value;
 
-  adminCred = [];
+  let adminCred = [];
   if (admin1Email) {
     adminCred.push({ email: admin1Email, password: admin1Password });
   }
@@ -37,7 +46,7 @@ const appDetailsFormSubmit = (e) => {
     adminCred.push({ email: admin2Email, password: admin2Password });
   }
 
-  userCred = [];
+  let userCred = [];
   if (user1Email) {
     userCred.push({ email: user1Email, password: user1Password });
   }
@@ -87,7 +96,7 @@ const appDetailsFormSubmit = (e) => {
 
       if (subFiles.length > 0) {
         // await subFiles.forEach(async (subFile) => {
-          for(let i = 0; i < subFiles.length; i++) {
+        for (let i = 0; i < subFiles.length; i++) {
           await firebaseStorage
             .ref("applications")
             .child(dataSaved.id + "/" + subFiles[i].name)
@@ -103,9 +112,8 @@ const appDetailsFormSubmit = (e) => {
             .catch((error) => {
               console.log(error);
             });
-        };
+        }
       }
-
 
       let appRef = await db.collection("applications").doc(dataSaved.id);
       return await appRef.get().then((appDoc) => {
@@ -118,8 +126,9 @@ const appDetailsFormSubmit = (e) => {
     })
     .then(() => {
       appDetailsFormHTML.reset();
-      document.querySelector("#main-img").value = '';
-      document.querySelector("#sub-imgs").value = '';
+      document.querySelector("#main-img").value = "";
+      document.querySelector("#sub-imgs").value = "";
+      $('#textarea-describtion').summernote('destroy');
       console.log("updated");
       // console.log(updatedData);
     })
