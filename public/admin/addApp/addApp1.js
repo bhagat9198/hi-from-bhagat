@@ -69,7 +69,7 @@ const appDetailsFormSubmit = (e) => {
   if (userCred.length > 0) {
     data.user = userCred;
   }
-  let mainImgUrl;
+  let mainImgUrl = {};
   let subImgsUrl = [];
   db.collection("applications")
     .add(data)
@@ -77,40 +77,45 @@ const appDetailsFormSubmit = (e) => {
       // console.log(dataSaved.id);
       console.log("data saved");
       if (mainFile) {
+        let fname = `${new Date().valueOf()}__${mainFile.name}`;
         await firebaseStorage
           .ref("applications")
-          .child(dataSaved.id + "/" + mainFile.name)
+          .child(dataSaved.id + "/" + fname)
           .put(mainFile);
         await firebaseStorage
           .ref("applications")
-          .child(dataSaved.id + "/" + mainFile.name)
+          .child(dataSaved.id + "/" + fname)
           .getDownloadURL()
           .then((url) => {
             // console.log(url);
-            mainImgUrl = url;
+            mainImgUrl.name = fname;
+            mainImgUrl.url = url;
           })
           .catch((error) => {
             console.log(error);
+            alert('ERROR : ', error.message);
           });
       }
 
       if (subFiles.length > 0) {
         // await subFiles.forEach(async (subFile) => {
         for (let i = 0; i < subFiles.length; i++) {
+          let fname = `${new Date().valueOf()}__${subFiles[i].name}`;
           await firebaseStorage
             .ref("applications")
-            .child(dataSaved.id + "/" + subFiles[i].name)
+            .child(dataSaved.id + "/" + fname)
             .put(subFiles[i]);
           await firebaseStorage
             .ref("applications")
-            .child(dataSaved.id + "/" + subFiles[i].name)
+            .child(dataSaved.id + "/" + fname)
             .getDownloadURL()
             .then((url) => {
               // console.log(url);
-              subImgsUrl.push(url);
+              subImgsUrl.push({id: new Date().valueOf(), name: fname, url: url});
             })
             .catch((error) => {
               console.log(error);
+              alert('ERROR : ',error.message );
             });
         }
       }
@@ -129,24 +134,91 @@ const appDetailsFormSubmit = (e) => {
       document.querySelector("#main-img").value = "";
       document.querySelector("#sub-imgs").value = "";
       $('#textarea-describtion').summernote('destroy');
+      appDetailsFormHTML.querySelector("#main-app-img-holder").innerHTML = "";
+      appDetailsFormHTML.querySelector("#sub-app-imgs-holder").innerHTML = '';
+      mainFile = null;
+      subFiles = [];
       console.log("updated");
       // console.log(updatedData);
     })
     .catch((error) => {
       console.log(error);
+      alert('ERROR : ',error.message );
     });
 };
 
 appDetailsFormHTML.addEventListener("submit", appDetailsFormSubmit);
 
 document.querySelector("#main-img").addEventListener("change", (e) => {
-  console.log(e.target.files);
+  // console.log(e.target.files);
+  let localAppId = e.target.dataset.localappid;
   mainFile = e.target.files[0];
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    appDetailsFormHTML.querySelector("#main-app-img-holder").innerHTML = "";
+    appDetailsFormHTML.querySelector("#main-app-img-holder").innerHTML = `
+    <div class="app-img-holder">
+      <img
+        id="main-img"
+        class="app-img"
+        src="${e.target.result}"
+        alt="Bhagat Singh"
+      />
+    </div>
+    <button type="button" class="btn btn-danger" data-localappid="${localAppId}" onclick="deleteImg(event, this)" data-img="added_0" data-imgtype="main">Delete</button>
+    `;
+  };
+  reader.readAsDataURL(mainFile);
 });
 
-document.querySelector("#sub-imgs").addEventListener("change", (e) => {
-  console.log(e.target.files);
+document.querySelector("#sub-imgs").addEventListener("change", async (e) => {
+  // console.log(e.target.files);
+  let localAppId = e.target.dataset.localappid;
   for (let i = 0; i < e.target.files.length; i++) {
+    appDetailsFormHTML.querySelector("#sub-app-imgs-holder").innerHTML += `
+    <div class="each-sub-img added-sub-img${i}">
+      <div class="app-img-holder ">
+        <img
+          id="added_${i}"
+          class="app-img"
+          src=""
+          alt="Bhagat Singh"
+        />
+      </div>
+      <button type="button"  class="btn btn-danger" data-localappid="${localAppId}" onclick="deleteImg(event, this)" data-img="added_${i}" data-imgtype="sub">Delete</button>
+    </div>
+    `;
     subFiles.push(e.target.files[i]);
+    let reader = new FileReader();
+
+    reader.onload = (e) => {
+      document.querySelector(`#added_${i}`).src = e.target.result;
+    };
+    reader.readAsDataURL(e.target.files[i]);
   }
 });
+
+const deleteImg = (e) => {
+  let type = e.target.dataset.imgtype;
+  let [status, index] = e.target.dataset.img.split("_");
+  if (type === "main") {
+    if (status === "added") {
+      mainFile = null;
+      appDetailsFormHTML.querySelector("#main-img").value = "";
+      appDetailsFormHTML.querySelector("#main-app-img-holder").remove();
+    } else {
+      appDetailsFormHTML.querySelector("#main-app-img-holder").remove();
+    }
+  } else {
+    if (status === "added") {
+      subFiles.splice(index, 1);
+      appDetailsFormHTML.querySelector(`.added-sub-img${index}`).remove();
+    } else {
+      let localAppId = e.target.dataset.localappid;
+      appDetailsFormHTML.querySelector(`.uploaded-sub-img${index}`).remove();
+      console.log(ALL_APPS[localAppId].data.subImgsUrl[index].id);
+      deleteUploadedImgs.push(ALL_APPS[localAppId].data.subImgsUrl[index].id);
+    }
+  }
+};
+

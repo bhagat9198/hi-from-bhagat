@@ -60,7 +60,7 @@
       href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
     />
 
-    <link rel="stylesheet" href="./../../assets/css/admin.css">
+    <link rel="stylesheet" href="./../../assets/css/admin.css" />
 
     <style>
       body,
@@ -78,7 +78,7 @@
   </head>
 
   <body>
-    <!-- ======= Mobile nav toggle button ======= --> 
+    <!-- ======= Mobile nav toggle button ======= -->
     <button type="button" class="mobile-nav-toggle d-xl-none">
       <i class="icofont-navigation-menu"></i>
     </button>
@@ -289,6 +289,7 @@
                     required
                     class="form-control"
                     id="textarea-describtion"
+                    name="textarea-describtion"
                     rows="10"
                     data-rule="required"
                     data-msg="Please write something for us"
@@ -369,36 +370,35 @@
                 <div class="form-group">
                   <label for="main-img">Main Img *</label>
                   <input id="main-img" required type="file" name="main-img" />
-                  <div>
-                    <div class="app-img-holder">
-                      <img class="app-img"  src="./../../assets/img/hero-bg.png" alt="">
+                  <div id="main-app-img-holder">
+                    <!-- <div class="app-img-holder">
+                      <img
+                        class="app-img"
+                        src="./../../assets/img/hero-bg.png"
+                        alt=""
+                      />
                     </div>
-                    <button class="btn btn-danger">Delete</button>
+                    <button class="btn btn-danger">Delete</button> -->
                   </div>
                 </div>
                 <div class="form-group">
                   <label for="sub-imgs">Sub Imgs *</label>
                   <input id="sub-imgs" type="file" multiple name="sub-imgs" />
-                  <div style="display: flex;">
-                  <div>
-                    <div class="app-img-holder">
-                      <img class="app-img" src="./../../assets/img/hero-bg.png" alt="">
-                    </div>
-                    <button class="btn btn-danger">Delete</button>
+                  <div
+                    id="sub-app-imgs-holder"
+                    style="display: flex; flex-wrap: wrap"
+                  >
+                    <!-- <div>
+                      <div class="app-img-holder">
+                        <img
+                          class="app-img"
+                          src="./../../assets/img/hero-bg.png"
+                          alt=""
+                        />
+                      </div>
+                      <button class="btn btn-danger">Delete</button>
+                    </div> -->
                   </div>
-                  <div>
-                    <div class="app-img-holder">
-                      <img class="app-img" src="./../../assets/img/hero-bg.png" alt="">
-                    </div>
-                    <button class="btn btn-danger">Delete</button>
-                  </div>
-                  <div>
-                    <div class="app-img-holder">
-                      <img class="app-img" src="./../../assets/img/hero-bg.png" alt="">
-                    </div>
-                    <button class="btn btn-danger">Delete</button>
-                  </div>
-                </div>
                 </div>
 
                 <div class="mb-3">
@@ -413,7 +413,6 @@
                 </div>
               </form>
             </div>
-          </div>
           </div>
         </div>
       </section>

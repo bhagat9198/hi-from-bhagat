@@ -4,16 +4,18 @@ const firebaseStorage = firebase.storage();
 const contactFormHTML = document.querySelector("#contact-form");
 
 const contactFormSubmit = (e) => {
-  contactFormHTML.querySelector('.loading').style.display = 'block';
+  contactFormHTML.querySelector(".loading").style.display = "block";
   e.preventDefault();
   const subject = contactFormHTML["subject"].value;
-  if(subject === 'Choose Your Subject') {
-    contactFormHTML.querySelector('.loading').style.display = 'none';
-    contactFormHTML.querySelector('.error-message').style.display = 'block';
-      contactFormHTML.querySelector('.error-message').innerHTML = `Please select a valid subject 🧐`;
-      setTimeout(() => {
-        contactFormHTML.querySelector('.error-message').style.display = 'none';
-      }, 3000);
+  if (subject === "Choose Your Subject") {
+    contactFormHTML.querySelector(".loading").style.display = "none";
+    contactFormHTML.querySelector(".error-message").style.display = "block";
+    contactFormHTML.querySelector(
+      ".error-message"
+    ).innerHTML = `Please select a valid subject 🧐`;
+    setTimeout(() => {
+      contactFormHTML.querySelector(".error-message").style.display = "none";
+    }, 3000);
     return;
   }
 
@@ -33,20 +35,19 @@ const contactFormSubmit = (e) => {
     .then((savedData) => {
       // console.log("data Saved");
       contactFormHTML.reset();
-      contactFormHTML.querySelector('.loading').style.display = 'none';
-      contactFormHTML.querySelector('.sent-message').style.display = 'block';
+      contactFormHTML.querySelector(".loading").style.display = "none";
+      contactFormHTML.querySelector(".sent-message").style.display = "block";
       setTimeout(() => {
-        contactFormHTML.querySelector('.sent-message').style.display = 'none';
+        contactFormHTML.querySelector(".sent-message").style.display = "none";
       }, 3000);
-      
     })
     .catch((error) => {
       // console.log(error);
       // console.log(error.message);
-      contactFormHTML.querySelector('.error-message').style.display = 'block';
-      contactFormHTML.querySelector('.error-message').innerHTML = error.message;
+      contactFormHTML.querySelector(".error-message").style.display = "block";
+      contactFormHTML.querySelector(".error-message").innerHTML = error.message;
       setTimeout(() => {
-        contactFormHTML.querySelector('.error-message').style.display = 'none';
+        contactFormHTML.querySelector(".error-message").style.display = "none";
       }, 3000);
     });
 };
@@ -129,22 +130,21 @@ const supportFormSubmit = (e) => {
             console.log(error);
           });
         let uRef = await db.collection("support").doc(savedData.id);
-        uRef.get().then(async (doc) => {
-          uRef.update("imgUrl", imgUrl);
-        });
-        document.querySelector("#support-form .loading").style.display = "none";
-        document.querySelector("#support-form .sent-message").style.display =
-          "block";
-        setTimeout(() => {
-          document.querySelector("#support-form .sent-message").style.display =
-            "none";
-        }, 3000);
-        supportFormHTML.querySelectorAll("img").forEach((imgEl) => {
-          imgEl.classList.remove("selected-avatar");
-        });
-        supportFormHTML.reset();
-        document.querySelector("#user-img").value = "";
+
+        uRef.update("imgUrl", { name: imgFile.name, url: imgUrl });
       }
+      document.querySelector("#support-form .loading").style.display = "none";
+      document.querySelector("#support-form .sent-message").style.display =
+        "block";
+      setTimeout(() => {
+        document.querySelector("#support-form .sent-message").style.display =
+          "none";
+      }, 3000);
+      supportFormHTML.querySelectorAll("img").forEach((imgEl) => {
+        imgEl.classList.remove("selected-avatar");
+      });
+      supportFormHTML.reset();
+      document.querySelector("#user-img").value = "";
     })
     .catch((error) => {
       console.log(error);
@@ -184,24 +184,24 @@ supportFormHTML
 
 // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const allTestimonials = document.querySelector('.all-testimonials');
+const allTestimonials = document.querySelector(".all-testimonials");
 
-db.collection('support').onSnapshot(snapSupport => {
+db.collection("support").onSnapshot((snapSupport) => {
   let snapSupportDocs = snapSupport.docs;
 
-  let eachTestimonial = '';
-  snapSupportDocs.forEach(snapDoc => {
+  let eachTestimonial = "";
+  snapSupportDocs.forEach((snapDoc) => {
     let snapData = snapDoc.data();
-    let imgSrc = '';
-    if(snapData.avatar || snapData.imgUrl) {
-      if(snapData.avatar) {
+    let imgSrc = "";
+    if (snapData.avatar || snapData.imgUrl) {
+      if (snapData.avatar) {
         imgSrc = `./assets/img/avatars/${snapData.avatar.img}.png`;
       }
-      if(snapData.imgUrl) {
-        imgSrc = snapData.imgUrl;
+      if (snapData.imgUrl) {
+        imgSrc = snapData.imgUrl.url;
       }
     } else {
-      let rand = Math.floor(Math.round()* (4 - 1)+1);
+      let rand = Math.floor(Math.round() * (4 - 1) + 1);
       imgSrc = `./assets/img/avatars/av${rand}.png`;
     }
 
@@ -215,14 +215,14 @@ db.collection('support').onSnapshot(snapSupport => {
       <img
         src="${imgSrc}"
         class="testimonial-img"
-        alt=""
+        alt="${snapData.name} | Bhagat Singh"
       />
       <h3>${snapData.name}</h3>
       <h4>${snapData.definedAs}</h4>
     </div>
     `;
-  })
-  allTestimonials.innerHTML = '';
+  });
+  allTestimonials.innerHTML = "";
   allTestimonials.innerHTML = eachTestimonial;
 
   $(".testimonials-carousel").owlCarousel({
@@ -231,40 +231,39 @@ db.collection('support').onSnapshot(snapSupport => {
     loop: true,
     responsive: {
       0: {
-        items: 1
+        items: 1,
       },
       768: {
-        items: 2
+        items: 2,
       },
       900: {
-        items: 3
-      }
-    }
+        items: 3,
+      },
+    },
   });
-})
-
+});
 
 // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const allPortfolioHTML = document.querySelector('.all-portfolio');
+const allPortfolioHTML = document.querySelector(".all-portfolio");
 
-db.collection('applications').onSnapshot(appSnaps => {
+db.collection("applications").onSnapshot((appSnaps) => {
   let appSnapsDocs = appSnaps.docs;
 
-  let eachPortfolio = '';
-  appSnapsDocs.forEach(appDoc => {
+  let eachPortfolio = "";
+  appSnapsDocs.forEach((appDoc) => {
     let appData = appDoc.data();
     eachPortfolio += `
     <div class="col-lg-4 col-md-6 portfolio-item filter-app">
       <div class="portfolio-wrap">
         <img
-          src="${appData.mainImgUrl}"
+          src="${appData.mainImgUrl.url}"
           class="img-banner"
-          alt=""
+          alt="${appData.appId} | Bhagat Singh"
         />
         <div class="portfolio-links">
           <a
-            href="${appData.mainImgUrl}"
+            href="${appData.mainImgUrl.url}"
             data-gall="portfolioGallery"
             class="venobox"
             title="App 1"
@@ -277,34 +276,34 @@ db.collection('applications').onSnapshot(appSnaps => {
       </div>
     </div>
     `;
-  })
+  });
   console.log(allPortfolioHTML);
-  allPortfolioHTML.innerHTML = '';
+  allPortfolioHTML.innerHTML = "";
   allPortfolioHTML.innerHTML = eachPortfolio;
-  var portfolioIsotope = $('.portfolio-container').isotope({
-    itemSelector: '.portfolio-item',
-    layoutMode: 'fitRows'
+  var portfolioIsotope = $(".portfolio-container").isotope({
+    itemSelector: ".portfolio-item",
+    layoutMode: "fitRows",
   });
 
-  $('#portfolio-flters li').on('click', function() {
-    $("#portfolio-flters li").removeClass('filter-active');
-    $(this).addClass('filter-active');
+  $("#portfolio-flters li").on("click", function () {
+    $("#portfolio-flters li").removeClass("filter-active");
+    $(this).addClass("filter-active");
 
     portfolioIsotope.isotope({
-      filter: $(this).data('filter')
+      filter: $(this).data("filter"),
     });
     aos_init();
   });
 
   // Initiate venobox (lightbox feature used in portofilo)
-  $(document).ready(function() {
-    $('.venobox').venobox();
+  $(document).ready(function () {
+    $(".venobox").venobox();
   });
 
   $(".portfolio-details-carousel").owlCarousel({
     autoplay: true,
     dots: true,
     loop: true,
-    items: 1
+    items: 1,
   });
-})
+});

@@ -13,7 +13,7 @@ db.collection('applications').onSnapshot(appSnaps => {
       docData.subImgsUrl.map(subUrl => {
         subImgs += `
         <img
-          src="${subUrl}"
+          src="${subUrl.url}"
           class="img-fluid img-fluid-webBanner"
           alt="${docData.name} | BHAGAT SINGH"
         />
@@ -73,7 +73,7 @@ db.collection('applications').onSnapshot(appSnaps => {
       <div class="portfolio-details-container">
         <div class="owl-carousel portfolio-details-carousel">
           <img
-            src="${docData.mainImgUrl}"
+            src="${docData.mainImgUrl.url}"
             class="img-fluid img-fluid-webBanner"
             alt="${docData.name} | BHAGAT SINGH"
           />
