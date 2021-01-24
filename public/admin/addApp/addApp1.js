@@ -222,3 +222,15 @@ const deleteImg = (e) => {
   }
 };
 
+// ///////////////////////////////////////////////////////////////////////
+
+// db.collection('applications').get().then(ss => {
+//   let ssd = ss.docs;
+
+//   ssd.forEach(async(doc) => {
+//     let ref = await db.collection('applications').doc(doc.id);
+//     let data = doc.data();
+//     data.appVisible = true;
+//     await ref.update(data);
+//   })
+// })  

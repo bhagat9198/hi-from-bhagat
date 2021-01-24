@@ -23,8 +23,10 @@
 }
 
 .selected-avatar {
-  border: 3px solid gray;
-  box-shadow: -5px 0px 10px gray;
+  /* border: 3px solid gray; */
+  /* box-shadow: -5px 0px 10px gray; */
+  background-color: #149ddd;
+
 }
 
 .av-radio {
@@ -39,4 +41,11 @@
 .contact-support {
   margin-top: 0;
   padding-top: 0;
+}
+
+.partner-img {
+  /* width: 300px; */
+  height: 150px;
+  object-fit: contain;
+  margin: 0 20px 0 20px;
 }

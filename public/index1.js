@@ -192,20 +192,21 @@ db.collection("support").onSnapshot((snapSupport) => {
   let eachTestimonial = "";
   snapSupportDocs.forEach((snapDoc) => {
     let snapData = snapDoc.data();
-    let imgSrc = "";
-    if (snapData.avatar || snapData.imgUrl) {
-      if (snapData.avatar) {
-        imgSrc = `./assets/img/avatars/${snapData.avatar.img}.png`;
+    if (snapData.statusVisible) {
+      let imgSrc = "";
+      if (snapData.avatar || snapData.imgUrl) {
+        if (snapData.avatar) {
+          imgSrc = `./assets/img/avatars/${snapData.avatar.img}.png`;
+        }
+        if (snapData.imgUrl) {
+          imgSrc = snapData.imgUrl.url;
+        }
+      } else {
+        let rand = Math.floor(Math.round() * (4 - 1) + 1);
+        imgSrc = `./assets/img/avatars/av${rand}.png`;
       }
-      if (snapData.imgUrl) {
-        imgSrc = snapData.imgUrl.url;
-      }
-    } else {
-      let rand = Math.floor(Math.round() * (4 - 1) + 1);
-      imgSrc = `./assets/img/avatars/av${rand}.png`;
-    }
 
-    eachTestimonial += `
+      eachTestimonial += `
     <div class="testimonial-item" data-aos="fade-up">
       <p>
         <i class="bx bxs-quote-alt-left quote-icon-left"></i>
@@ -221,7 +222,9 @@ db.collection("support").onSnapshot((snapSupport) => {
       <h4>${snapData.definedAs}</h4>
     </div>
     `;
+    }
   });
+
   allTestimonials.innerHTML = "";
   allTestimonials.innerHTML = eachTestimonial;
 
@@ -253,29 +256,31 @@ db.collection("applications").onSnapshot((appSnaps) => {
   let eachPortfolio = "";
   appSnapsDocs.forEach((appDoc) => {
     let appData = appDoc.data();
-    eachPortfolio += `
-    <div class="col-lg-4 col-md-6 portfolio-item filter-app">
-      <div class="portfolio-wrap">
-        <img
-          src="${appData.mainImgUrl.url}"
-          class="img-banner"
-          alt="${appData.appId} | Bhagat Singh"
-        />
-        <div class="portfolio-links">
-          <a
-            href="${appData.mainImgUrl.url}"
-            data-gall="portfolioGallery"
-            class="venobox"
-            title="App 1"
-            ><i class="bx bx-plus"></i
-          ></a>
-          <a href="./applications-details/applications-details.html#${appData.appId}" title="More Details"
-            ><i class="bx bx-link"></i
-          ></a>
+    if (appData.appVisible) {
+      eachPortfolio += `
+      <div class="col-lg-4 col-md-6 portfolio-item filter-app">
+        <div class="portfolio-wrap">
+          <img
+            src="${appData.mainImgUrl.url}"
+            class="img-banner"
+            alt="${appData.appId} | Bhagat Singh"
+          />
+          <div class="portfolio-links">
+            <a
+              href="${appData.mainImgUrl.url}"
+              data-gall="portfolioGallery"
+              class="venobox"
+              title="App 1"
+              ><i class="bx bx-plus"></i
+            ></a>
+            <a href="./applications-details/applications-details.html#${appData.appId}" title="More Details"
+              ><i class="bx bx-link"></i
+            ></a>
+          </div>
         </div>
       </div>
-    </div>
-    `;
+      `;
+    }
   });
   console.log(allPortfolioHTML);
   allPortfolioHTML.innerHTML = "";
