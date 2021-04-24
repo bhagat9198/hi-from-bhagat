@@ -86,7 +86,7 @@ db.collection("applications").onSnapshot((appSnaps) => {
               <li class="main-li"><strong>Frontend</strong>: ${docData.frontend}</li>
               <li class="main-li"><strong>Backend</strong>: ${docData.backend}</li>
               <li class="main-li">
-                <strong>Project URL</strong>: <a href="#">${docData.link}</a>
+                <strong>Project URL</strong>: <a href="${docData.link}">${docData.link}</a>
               </li>
               ${credInfo}
             </ul>

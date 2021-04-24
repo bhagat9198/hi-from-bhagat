@@ -248,9 +248,9 @@ db.collection("support").onSnapshot((snapSupport) => {
 
 // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const allPortfolioHTML = document.querySelector(".all-portfolio");
+const allPortfolioHTML = document.querySelector(".all-projects");
 
-db.collection("applications").onSnapshot((appSnaps) => {
+db.collection("applications").onSnapshot(async(appSnaps) => {
   let appSnapsDocs = appSnaps.docs;
 
   let eachPortfolio = "";
@@ -258,22 +258,22 @@ db.collection("applications").onSnapshot((appSnaps) => {
     let appData = appDoc.data();
     if (appData.appVisible) {
       eachPortfolio += `
-      <div class="col-lg-4 col-md-6 portfolio-item filter-app">
-        <div class="portfolio-wrap">
+      <div class="col-lg-4 col-md-6 projects-item filter-app">
+        <div class="projects-wrap">
           <img
             src="${appData.mainImgUrl.url}"
             class="img-banner"
             alt="${appData.appId} | Bhagat Singh"
           />
-          <div class="portfolio-links">
+          <div class="projects-links">
             <a
               href="${appData.mainImgUrl.url}"
-              data-gall="portfolioGallery"
+              data-gall="projectsGallery"
               class="venobox"
               title="App 1"
               ><i class="bx bx-plus"></i
             ></a>
-            <a href="./applications-details/applications-details.html#${appData.appId}" title="More Details"
+            <a href="./all-projects/web-projects.html#${appData.appId}" title="More Details"
               ><i class="bx bx-link"></i
             ></a>
           </div>
@@ -282,16 +282,16 @@ db.collection("applications").onSnapshot((appSnaps) => {
       `;
     }
   });
-  console.log(allPortfolioHTML);
   allPortfolioHTML.innerHTML = "";
   allPortfolioHTML.innerHTML = eachPortfolio;
-  var portfolioIsotope = $(".portfolio-container").isotope({
-    itemSelector: ".portfolio-item",
+  document.querySelector('#linkToAllProjects').style.display="block";
+  var portfolioIsotope = $(".projects-container").isotope({
+    itemSelector: ".projects-item",
     layoutMode: "fitRows",
   });
 
-  $("#portfolio-flters li").on("click", function () {
-    $("#portfolio-flters li").removeClass("filter-active");
+  $("#projects-flters li").on("click", function () {
+    $("#projects-flters li").removeClass("filter-active");
     $(this).addClass("filter-active");
 
     portfolioIsotope.isotope({
@@ -305,10 +305,11 @@ db.collection("applications").onSnapshot((appSnaps) => {
     $(".venobox").venobox();
   });
 
-  $(".portfolio-details-carousel").owlCarousel({
+  $(".projects-details-carousel").owlCarousel({
     autoplay: true,
     dots: true,
     loop: true,
     items: 1,
   });
+
 });
